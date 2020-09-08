@@ -1,0 +1,58 @@
+﻿@inject SignInManager<IdentityUser> signManager; 
+ 
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid bg-light">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-6">
+                    <nav>
+                        <ul class="nav justify-content-lg-start">
+                            <li class="nav-item">
+                                <a class="nav-link" href="../Home/MySpecialPage"> Yetkili</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-6">
+                    <nav>
+                        <ul class="nav justify-content-end">
+                            @if (signManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <form asp-action="Logout" method="post">
+                                        <button type="submit" class="nav-link btn btn-link py-0">
+                                            Logout @User.Identity.Name
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+
+                                <li class="nav-item"> <a class="nav-link" href="~/Home/Register">Register</a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="~/Home/Login">Login</a> </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container m-md-auto">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/js/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    
+</body>
+</html>
