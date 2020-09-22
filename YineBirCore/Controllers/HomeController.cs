@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using YineBirCore.Models;
 using YineBirCore.ViewModels;
+using Microsoft.EntityFrameworkCore; 
 
 namespace YineBirCore.Controllers
 {
@@ -10,24 +14,74 @@ namespace YineBirCore.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UrunlerDbContext udc;
 
         public HomeController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager, UrunlerDbContext udc)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.udc = udc;
+
         }
+
+        public IEnumerable<Urunler> Urunlers { get; set; }
+        public string SearchTerm { get; set; }
+
 
         public IActionResult Index()
         {
             return View();
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Urunler urn)
+        {
+            if(ModelState.IsValid)
+            {
+                udc.Add(urn);
+                await udc.SaveChangesAsync();
+                return RedirectToAction("Urunler"); 
+            }
+
+            return View(urn); 
+        }
+
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Urunler()
+        {
+            var getir = udc.Urunler.ToList(); 
+            return View(getir);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Urunler(string searchtext)
+        {
+            var urns = from u in udc.Urunler
+                       select u;
+
+            if (!string.IsNullOrEmpty(searchtext))
+            {
+                urns = urns.Where(s => s.UrunAdi.Contains(searchtext)); 
+            }
+
+            return View(await urns.ToListAsync()); 
+
+
+        }
+
 
         public IActionResult Login()
         {

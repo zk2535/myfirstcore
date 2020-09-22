@@ -1,0 +1,72 @@
+﻿@model IEnumerable<YineBirCore.Models.Urunler>
+
+@{
+    ViewData["Title"] = "Urunler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Urunler</h2>
+
+
+    <form method="post" asp-action="Urunler">
+        <div class="input-group">
+            <input class="form-control" name="searchtext" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+    </form>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.UrunID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UrunAdi)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Miktari)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Birimi)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BirimFiyati)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UrunID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UrunAdi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Miktari)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Birimi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BirimFiyati)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
